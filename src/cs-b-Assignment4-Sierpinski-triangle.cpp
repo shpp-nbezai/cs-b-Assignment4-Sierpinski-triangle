@@ -27,20 +27,15 @@ int WINDOW_HEIGHT = 800;
  *@param  - topPoint a reference to the third object point
  *@result - randomly selected object of the specified point in the parameters
 */
-GPoint getNewRandomPoint(GPoint &leftPoint,
-                         GPoint &rightPoint,
-                         GPoint &topPoint){
-    int newPointCounter = randomInteger(0,2);
+const GPoint& getNewRandomPoint(const GPoint &leftPoint,
+                         const GPoint &rightPoint,
+                         const GPoint &topPoint){
+    int newPointCounter = randomInteger(0, 2);
     switch (newPointCounter) {
     case 0:
         return leftPoint;
-        break;
     case 1:
         return rightPoint;
-        break;
-    case 2:
-        return topPoint;
-        break;
     }
     return topPoint;
 }
@@ -50,21 +45,12 @@ GPoint getNewRandomPoint(GPoint &leftPoint,
  *@param  - nextPoint a reference to the object with the coordinates of the second point
  *@result - object coordinates middle of given points
 */
-GPoint getMiddlePoint(GPoint &startPoint, GPoint &nextPoint){
-    double middleX=0;
-    double middleY=0;
+GPoint getMiddlePoint(const GPoint &startPoint, const GPoint &nextPoint){
+    double middleX, middleY;
 
-    if (startPoint.getX() <= nextPoint.getX()){
-        middleX = startPoint.getX() + ((nextPoint.getX() - startPoint.getX()) / 2);
-    } else {
-        middleX = nextPoint.getX() + ((startPoint.getX() - nextPoint.getX()) / 2);
-    }
+    middleX = startPoint.getX() + ((nextPoint.getX() - startPoint.getX()) / 2);
+    middleY = startPoint.getY() + ((nextPoint.getY() - startPoint.getY()) / 2);
 
-    if (startPoint.getY() <= nextPoint.getY()){
-        middleY = startPoint.getY() + ((nextPoint.getY() - startPoint.getY()) / 2);
-    }else {
-        middleY = nextPoint.getY() + ((startPoint.getY() - nextPoint.getY()) / 2);
-    }
     GPoint middlePoint(middleX, middleY);
     return middlePoint;
 
@@ -80,16 +66,18 @@ GPoint getMiddlePoint(GPoint &startPoint, GPoint &nextPoint){
 */
 
 void drawNewPoint(GWindow &gw,
-                  GPoint &leftPoint,
-                  GPoint &rightPoint,
-                  GPoint &topPoint,
-                  GPoint &startPoint,
+                  const GPoint &leftPoint,
+                  const GPoint &rightPoint,
+                  const GPoint &topPoint,
+                  const GPoint &startPoint,
                   int count){
 
-    if (count == 0)return;
-    GPoint nextPoint = getNewRandomPoint(leftPoint, rightPoint, topPoint);
+    if (count == 0)
+        return;
+
+    const GPoint& nextPoint = getNewRandomPoint(leftPoint, rightPoint, topPoint);
     GPoint middlePoint = getMiddlePoint(startPoint, nextPoint);
-    gw.fillOval(middlePoint.getX(), middlePoint.getY(),1,1);
+    gw.fillOval(middlePoint.getX(), middlePoint.getY(), 1, 1);
     pause(DRAW_PAUSE);
     count--;
     drawNewPoint(gw, leftPoint, rightPoint, topPoint, middlePoint, count);
@@ -106,11 +94,11 @@ void displaySierpinskiTriangle(){
      * draw three vertices of a triangle
     */
     GPoint topPoint(graphicsWindow.getWidth() / 2,0);
-    GPoint leftPoint(0,graphicsWindow.getHeight());
-    GPoint rightPoint(graphicsWindow.getWidth(),graphicsWindow.getHeight());
-    graphicsWindow.fillOval(topPoint.getX(), topPoint.getY(),2,2);
-    graphicsWindow.fillOval(leftPoint.getX(), leftPoint.getY(),2,2);
-    graphicsWindow.fillOval(rightPoint.getX(), rightPoint.getY(),2,2);
+    GPoint leftPoint(0, graphicsWindow.getHeight());
+    GPoint rightPoint(graphicsWindow.getWidth(), graphicsWindow.getHeight());
+    graphicsWindow.fillOval(topPoint.getX(), topPoint.getY(), 2, 2);
+    graphicsWindow.fillOval(leftPoint.getX(), leftPoint.getY(), 2, 2);
+    graphicsWindow.fillOval(rightPoint.getX(), rightPoint.getY(), 2, 2);
 
     /*
      * draw a starting point for recursion
@@ -118,7 +106,7 @@ void displaySierpinskiTriangle(){
     double newX = randomReal(0, graphicsWindow.getWidth());
     double newY = randomReal(0, graphicsWindow.getHeight());
     GPoint startPoint(newX, newY);
-    graphicsWindow.fillOval(newX, newY,1,1);
+    graphicsWindow.fillOval(newX, newY, 1, 1);
 
     drawNewPoint(graphicsWindow, leftPoint, rightPoint, topPoint, startPoint, COUNT_POINTS);
 }
